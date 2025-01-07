@@ -20,13 +20,12 @@ def translate_text(text,target_lenguage='es'):
 
 
 def generate_dynamic_image(title, content, output_path="output.png"):
-    # Configuración inicial
-    img_width = 800  # Ancho fijo de la imagen
-    background_color = (0, 0, 0)  # Fondo negro
-    text_color = (255, 255, 255)  # Texto blanco
-    margin = 40  # Margen alrededor del texto
-    max_font_title = 42  # Tamaño máximo del título
-    max_font_content = 36  # Tamaño máximo del contenido
+    img_width = 800  
+    background_color = (0, 0, 0) 
+    text_color = (255, 255, 255) 
+    margin = 40 
+    max_font_title = 42 
+    max_font_content = 36 
 
     # Cargar fuentes
     try:
@@ -36,7 +35,7 @@ def generate_dynamic_image(title, content, output_path="output.png"):
         print("Fuente no encontrada. Usa fuentes predeterminadas.")
         font_title = font_content = ImageFont.load_default()
 
-    # Función para ajustar texto según el ancho
+    
     def wrap_text(text, font, max_width):
         lines = []
         words = text.split()
@@ -57,34 +56,28 @@ def generate_dynamic_image(title, content, output_path="output.png"):
 
         return lines
 
-    # Ajustar las líneas del título y contenido
     title_lines = wrap_text(title, font_title, img_width - 2 * margin)
     content_lines = wrap_text(content, font_content, img_width - 2 * margin)
 
-    # Calcular altura dinámica de la imagen
     title_height = sum(font_title.getbbox(line)[3] - font_title.getbbox(line)[1] for line in title_lines) + (len(title_lines) - 1) * 10
     content_height = sum(font_content.getbbox(line)[3] - font_content.getbbox(line)[1] for line in content_lines) + (len(content_lines) - 1) * 10
     img_height = margin * 2 + title_height + 30 + content_height
 
-    # Crear la imagen
+
     img = Image.new("RGB", (img_width, img_height), background_color)
     draw = ImageDraw.Draw(img)
 
-    # Dibujar el título
     y = margin
     for line in title_lines:
         draw.text((margin, y), line, fill=text_color, font=font_title)
         y += font_title.getbbox(line)[3] - font_title.getbbox(line)[1] + 10
 
-    # Espaciado entre título y contenido
     y += 20
 
-    # Dibujar el contenido
     for line in content_lines:
         draw.text((margin, y), line, fill=text_color, font=font_content)
         y += font_content.getbbox(line)[3] - font_content.getbbox(line)[1] + 10
 
-    # Guardar la imagen
     img.save(output_path)
     print(f"Imagen generada: {output_path}")
 
